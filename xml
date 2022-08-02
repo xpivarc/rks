@@ -1,0 +1,46 @@
+<domain type="kvm" xmlns:qemu="http://libvirt.org/schemas/domain/qemu/1.0">
+	<name>default_vmi-fedora</name>
+	<memory unit="b">1024000000</memory>
+	<os>
+		<type arch="x86_64" machine="q35">hvm</type>
+		<smbios mode="sysinfo"></smbios>
+	</os>
+	<sysinfo type="smbios">
+		<system>
+			<entry name="uuid">89151ab9-feb3-4c21-a331-ff15db2a17ab</entry>
+			<entry name="manufacturer">KubeVirt</entry>
+			<entry name="family">KubeVirt</entry>
+			<entry name="product">None</entry>
+			<entry name="sku"></entry>
+			<entry name="version"></entry>
+		</system>
+		<bios></bios>
+		<baseBoard></baseBoard>
+		<chassis></chassis>
+	</sysinfo>
+	<devices>
+		<controller type="usb" index="0" model="none"></controller>
+		<controller type="scsi" index="0" model="virtio-non-transitional"></controller>
+		<controller type="virtio-serial" index="0" model="virtio-non-transitional"></controller>
+		<video>
+			<model type="vga" heads="1" vram="16384"></model>
+		</video>
+		<memballoon model="virtio-non-transitional">
+			<stats period="10"></stats>
+		</memballoon>
+		<console type="pty">
+			<target type="serial" port="0"></target>
+		</console>
+		<rng model="virtio-non-transitional">
+			<backend model="random">/dev/urandom</backend>
+		</rng>
+	</devices>
+	<features>
+		<acpi></acpi>
+	</features>
+	<cpu mode="host-model">
+		<topology sockets="1" cores="1" threads="1"></topology>
+	</cpu>
+	<vcpu placement="static">1</vcpu>
+	<iothreads>1</iothreads>
+</domain>
