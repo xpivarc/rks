@@ -32,13 +32,30 @@ func main() {
 	}
 	input := bufio.NewScanner(os.Stdin)
 
+	xml, err := os.ReadFile("xml")
+	if err != nil {
+		panic(err)
+	}
+
+	vmDom, err := virConn.DomainDefineXML(string(xml))
+	if err != nil {
+		panic(err)
+	}
+	defer vmDom.Free()
+
+	_ = vmDom.Destroy()
+	err = vmDom.Create()
+	if err != nil {
+		panic(err)
+	}
+
 	statsTypes := libvirt.DOMAIN_STATS_DIRTYRATE
 	flags := libvirt.CONNECT_GET_ALL_DOMAINS_STATS_RUNNING
 	doms := []*libvirt.Domain{}
 
 	fmt.Println("Ready to find the leak")
 	for input.Scan() {
-		domss, err := virConn.ListAllDomains(libvirt.CONNECT_LIST_DOMAINS_ACTIVE)
+		domss, err := virConn.ListAllDomains(libvirt.CONNECT_LIST_DOMAINS_RUNNING)
 		if err != nil {
 			panic(err)
 		}
